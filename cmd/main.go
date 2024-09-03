@@ -18,7 +18,7 @@ func main(){
 	r := gin.Default()
 	h := db.Init(dbUrl)
 
-	r.Use(middleware.Cors)
+	r.Use(middleware.CorsMiddleware())
 
 	tasks.RegisterRoutes(r,h)
 

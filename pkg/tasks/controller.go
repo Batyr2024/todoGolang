@@ -3,7 +3,7 @@ package tasks
 import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
-	"github.com/rs/cors"
+
 )
 
 type handler struct {
@@ -16,6 +16,7 @@ func RegisterRoutes(r *gin.Engine, db *gorm.DB) {
 	}
 
 	routes := r.Group("/tasks")
-	routes.GET("/get", h.GetTasks)
-	routes.POST("/post", h.AddTask)
+		routes.GET("/", h.GetTasks)
+		routes.POST("/", h.AddTask)
+		routes.DELETE("/",h.DeleteTask)
 }
