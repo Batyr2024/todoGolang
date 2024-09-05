@@ -1,9 +1,7 @@
 package models
 
-import "gorm.io/gorm"
-
 type Task struct {
-	gorm.Model // add: ID, CreatedAt, UpdatedAt, DeletedAt
+	ID uint   `json:"id" gorm:"unique;not null"`
 	Text string`json:"text"`
 	Checked bool`json:"checked"`
 }
