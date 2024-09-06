@@ -1,15 +1,15 @@
 package main
 
 import (
-	"github.com/Batyr2024/todoGolang/pkg/common/db"
-	"github.com/Batyr2024/todoGolang/pkg/tasks"
-	"github.com/Batyr2024/todoGolang/middleware"
+	"github.com/Batyr2024/todoGolang/db"
+	"github.com/Batyr2024/todoGolang/internal/api"
+	"github.com/Batyr2024/todoGolang/internal/api/middleware"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
 
 func main(){
-	viper.SetConfigFile("./pkg/common/envs/.env")
+	viper.SetConfigFile("./envs/.env")
 	viper.ReadInConfig()
 	
 	port := viper.Get("PORT").(string)
@@ -20,7 +20,7 @@ func main(){
 
 	r.Use(middleware.CorsMiddleware())
 
-	tasks.RegisterRoutes(r,h)
+	api.RegisterRoutes(r,h)
 
 	r.Run(port)
 }
