@@ -19,7 +19,10 @@ func NewServer(h *handler.Task) *ServerHTTP {
 
 	routes.GET("/", h.FindAll)
 	routes.POST("/", h.Create)
-	routes.DELETE("/", h.DeleteByID)
+	routes.DELETE("/:id", h.DeleteByID)
+	routes.PATCH("/", h.ChangeCheckedByID)
+	routes.PATCH("/:check", h.ChangeCheckedAll)
+	routes.DELETE("/", h.DeleteAll)
 
 	return &ServerHTTP{engine: engine}
 }

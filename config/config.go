@@ -8,7 +8,7 @@ type Config struct {
 }
 
 func Load(path string) (c Config, err error) {
-	viper.AddConfigPath("/home/dunice/Документы/todoGolang/envs")
+	viper.AddConfigPath("/home/dunice/Документы/todoGolang")
 	viper.SetConfigName("dev")
 	viper.SetConfigType("env")
 

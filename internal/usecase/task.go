@@ -7,8 +7,11 @@ import (
 
 type interfaceHandler interface {
 	FindAll(ctx context.Context) ([]domain.Task, error)
-	Create(ctx context.Context, task domain.Task) (bool, error)
-	DeleteByID(ctx context.Context, id int) (bool, error)
+	Create(ctx context.Context, task domain.Task) error
+	DeleteByID(ctx context.Context, id int) error
+	DeleteAll(ctx context.Context) error
+	ChangeCheckedByID(ctx context.Context, id int, checked bool) error
+	ChangeCheckedAll(ctx context.Context, checked bool) error
 }
 
 type useCase struct {
@@ -26,12 +29,26 @@ func (c *useCase) FindAll(ctx context.Context) ([]domain.Task, error) {
 	return tasks, err
 }
 
-func (c *useCase) Create(ctx context.Context, task domain.Task) (bool, error) {
-	done, err := c.taskRepo.Create(ctx, task)
-	return done, err
+func (c *useCase) Create(ctx context.Context, task domain.Task) error {
+	err := c.taskRepo.Create(ctx, task)
+	return err
 }
 
-func (c *useCase) DeleteByID(ctx context.Context, id int) (bool, error) {
-	done, err := c.taskRepo.DeleteByID(ctx, id)
-	return done, err
+func (c *useCase) DeleteByID(ctx context.Context, id int) error {
+	err := c.taskRepo.DeleteByID(ctx, id)
+	return err
+}
+func (c *useCase) ChangeCheckedByID(ctx context.Context, id int, checked bool) error {
+	err := c.taskRepo.ChangeCheckedByID(ctx, id, checked)
+	return err
+}
+
+func (c *useCase) ChangeCheckedAll(ctx context.Context, checked bool) error {
+	err := c.taskRepo.ChangeCheckedAll(ctx, checked)
+	return err
+}
+
+func (c *useCase) DeleteAll(ctx context.Context) error {
+	err := c.taskRepo.DeleteAll(ctx)
+	return err
 }

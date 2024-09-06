@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	const pathCfg = "/home/dunice/Документы/todoGolang/envs/.env"
+	const pathCfg = "/home/dunice/Документы/todoGolang/.env"
 	config, err := config.Load(pathCfg)
 	if err != nil {
 		log.Fatal("cannot load config: ", err)
