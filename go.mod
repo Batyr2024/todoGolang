@@ -3,6 +3,7 @@ module github.com/Batyr2024/todoGolang
 go 1.23.0
 
 require (
+	github.com/google/wire v0.6.0
 	github.com/spf13/viper v1.19.0
 	gorm.io/driver/postgres v1.5.9
 	gorm.io/gorm v1.25.11

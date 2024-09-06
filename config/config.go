@@ -2,26 +2,27 @@ package config
 
 import "github.com/spf13/viper"
 
-type Config struct{
-	Port string `mapstructure:"PORT"`
+type Config struct {
+	Port  string `mapstructure:"PORT"`
 	DBUrl string `mapstructure:"DB_URL"`
-
 }
 
-func LoadConfig() (c Config, err error){
-	viper.AddConfigPath("./pfg/common/config/envs")
+func Load(path string) (c Config, err error) {
+	viper.AddConfigPath("/home/dunice/Документы/todoGolang/envs")
 	viper.SetConfigName("dev")
 	viper.SetConfigType("env")
 
 	viper.AutomaticEnv()
 
+	viper.SetConfigFile(path)
+
 	err = viper.ReadInConfig()
 
 	if err != nil {
-		return
+		return c, err
 	}
 
 	err = viper.Unmarshal(&c)
 
-	return
+	return c, err
 }

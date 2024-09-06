@@ -1,26 +1,20 @@
 package main
 
 import (
-	"github.com/Batyr2024/todoGolang/db"
-	"github.com/Batyr2024/todoGolang/internal/api"
-	"github.com/Batyr2024/todoGolang/internal/api/middleware"
-	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
+	"github.com/Batyr2024/todoGolang/config"
+	initialize "github.com/Batyr2024/todoGolang/internal/init"
+	"log"
 )
 
-func main(){
-	viper.SetConfigFile("./envs/.env")
-	viper.ReadInConfig()
-	
-	port := viper.Get("PORT").(string)
-	dbUrl := viper.Get("DB_URL").(string)
-	
-	r := gin.Default()
-	h := db.Init(dbUrl)
+func main() {
+	const pathCfg = "/home/dunice/Документы/todoGolang/envs/.env"
+	config, err := config.Load(pathCfg)
+	if err != nil {
+		log.Fatal("cannot load config: ", err)
+	}
 
-	r.Use(middleware.CorsMiddleware())
+	server := initialize.Api(config)
 
-	api.RegisterRoutes(r,h)
+	server.Start(string(config.Port))
 
-	r.Run(port)
 }

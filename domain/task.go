@@ -1,4 +1,4 @@
-package models
+package domain
 
 type Task struct {
 	ID uint   `json:"id" gorm:"unique;not null"`
