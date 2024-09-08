@@ -64,7 +64,7 @@ func (h *Task) Create(c *gin.Context) {
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
-	c.JSON(http.StatusOK, 1)
+	c.JSON(http.StatusCreated, 1)
 }
 
 func (h *Task) ChangeCheckedByID(c *gin.Context) {

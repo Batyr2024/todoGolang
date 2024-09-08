@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/Batyr2024/todoGolang/config"
-	initialize "github.com/Batyr2024/todoGolang/internal/init"
+	initialize "github.com/Batyr2024/todoGolang/internal/api/init"
 	"log"
 )
 

@@ -2,11 +2,11 @@ package initialize
 
 import (
 	config "github.com/Batyr2024/todoGolang/config"
-	"github.com/Batyr2024/todoGolang/db"
+	db "github.com/Batyr2024/todoGolang/db"
 	http "github.com/Batyr2024/todoGolang/internal/api"
-	"github.com/Batyr2024/todoGolang/internal/api/handler"
-	"github.com/Batyr2024/todoGolang/internal/repository"
-	"github.com/Batyr2024/todoGolang/internal/usecase"
+	handler "github.com/Batyr2024/todoGolang/internal/api/handler"
+	repository "github.com/Batyr2024/todoGolang/internal/repository"
+	usecase "github.com/Batyr2024/todoGolang/internal/usecase"
 )
 
 func Api(cfg config.Config) *http.ServerHTTP {

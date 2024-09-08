@@ -1,20 +1,24 @@
 package db
 
 import (
-	"github.com/Batyr2024/todoGolang/config"
-	"github.com/Batyr2024/todoGolang/domain"
+	"log"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"log"
+	
+	config "github.com/Batyr2024/todoGolang/config"
+	migration "github.com/Batyr2024/todoGolang/db/migration"
 )
 
 func Connect(cfg config.Config) *gorm.DB {
-	db, err := gorm.Open(postgres.Open(cfg.DBUrl), &gorm.Config{})
-	if err != nil {
-		log.Fatalln(err)
+	db, errCfg := gorm.Open(postgres.Open(cfg.DBUrl), &gorm.Config{})
+	if errCfg != nil {
+		log.Fatalln(errCfg)
 	}
 
-	db.AutoMigrate(&domain.Task{})
+	errMigrate := migration.UpTask(db)
+	if errMigrate!=nil{
+		log.Fatalln(errMigrate)
+	}
 
 	return db
 }
