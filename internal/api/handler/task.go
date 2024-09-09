@@ -16,6 +16,7 @@ type interfaceUseCase interface {
 	DeleteAll(ctx context.Context) error
 	ChangeCheckedByID(ctx context.Context, id int, checked bool) error
 	ChangeCheckedAll(ctx context.Context, checked bool) error
+	ChangeText(ctx context.Context, id int, text string) error
 }
 
 type Task struct {
@@ -105,6 +106,22 @@ func (h *Task) ChangeCheckedAll(c *gin.Context) {
 
 func (h *Task) DeleteAll(c *gin.Context) {
 	errRepo := h.useCase.DeleteAll(c.Request.Context())
+	if errRepo != nil {
+		c.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+	c.JSON(http.StatusOK, 1)
+}
+
+func (h *Task) ChangeText(c *gin.Context) {
+	var dataTask domain.Task
+
+	if err := c.BindJSON(&dataTask); err != nil {
+		c.JSON(http.StatusNotFound, err)
+		return
+	}
+
+	errRepo := h.useCase.ChangeText(c.Request.Context(), int(dataTask.ID), dataTask.Text)
 	if errRepo != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 		return

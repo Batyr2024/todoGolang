@@ -23,7 +23,7 @@ func NewServer(h *handler.Task) *ServerHTTP {
 	routes.PATCH("/", h.ChangeCheckedByID)
 	routes.PATCH("/:check", h.ChangeCheckedAll)
 	routes.DELETE("/", h.DeleteAll)
-
+	routes.PUT("/", h.ChangeText)
 	return &ServerHTTP{engine: engine}
 }
 func (s *ServerHTTP) Start(port string) {

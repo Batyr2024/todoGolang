@@ -14,6 +14,7 @@ type interfaceHandler interface {
 	DeleteAll(ctx context.Context) error
 	ChangeCheckedByID(ctx context.Context, id int, checked bool) error
 	ChangeCheckedAll(ctx context.Context, checked bool) error
+	ChangeText(ctx context.Context, id int, text string) error
 }
 
 type dataBase struct {
@@ -56,5 +57,12 @@ func (c *dataBase) ChangeCheckedAll(ctx context.Context, checked bool) error {
 func (c *dataBase) DeleteAll(ctx context.Context) error {
 	var tasks domain.Task
 	err := c.DB.Model(&tasks).Where("checked=?", true).Delete(&tasks).Error
+	return err
+}
+
+func (c *dataBase) ChangeText(ctx context.Context, id int, text string) error {
+	var tasks domain.Task
+	err := c.DB.Model(&tasks).Where("id = ?", id).Update("text", text).Error
+	c.DB.Model(&tasks).Where("id = ?", id).Update("checked", false)
 	return err
 }

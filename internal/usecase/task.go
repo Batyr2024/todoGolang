@@ -12,6 +12,7 @@ type interfaceHandler interface {
 	DeleteAll(ctx context.Context) error
 	ChangeCheckedByID(ctx context.Context, id int, checked bool) error
 	ChangeCheckedAll(ctx context.Context, checked bool) error
+	ChangeText(ctx context.Context, id int, text string) error
 }
 
 type useCase struct {
@@ -50,5 +51,10 @@ func (c *useCase) ChangeCheckedAll(ctx context.Context, checked bool) error {
 
 func (c *useCase) DeleteAll(ctx context.Context) error {
 	err := c.taskRepo.DeleteAll(ctx)
+	return err
+}
+
+func (c *useCase) ChangeText(ctx context.Context, id int, text string) error {
+	err := c.taskRepo.ChangeText(ctx, id, text)
 	return err
 }
