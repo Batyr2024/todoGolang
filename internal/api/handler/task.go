@@ -27,6 +27,13 @@ func New(taskUseCase interfaceUseCase) *Task {
 	return &Task{useCase: taskUseCase}
 }
 
+// FindAll            godoc
+// @Summary      Get tasks array
+// @Description  Responds with the list of all tasks as JSON.
+// @Tags         tasks
+// @Produce      json
+// @Success      200  {array}  domain.Task
+// @Router       /tasks [get]
 func (h *Task) FindAll(c *gin.Context) {
 	tasks, err := h.useCase.FindAll(c.Request.Context())
 	if err != nil {
@@ -36,6 +43,13 @@ func (h *Task) FindAll(c *gin.Context) {
 	c.JSON(http.StatusOK, tasks)
 }
 
+// DeleteByID            godoc
+// @Summary      Delete single task by id
+// @Description  Responds 1 in JSON format.
+// @Tags         tasks
+// @Produce      json
+// @Success      200  {int}  1
+// @Router       /tasks/{id} [delete]
 func (h *Task) DeleteByID(c *gin.Context) {
 	queryId := c.Param("id")
 	id, errParseInt := strconv.Atoi(queryId)
@@ -53,6 +67,13 @@ func (h *Task) DeleteByID(c *gin.Context) {
 	c.JSON(http.StatusOK, 1)
 }
 
+// Create            godoc
+// @Summary      Create task
+// @Description  Responds 1 in JSON format.
+// @Tags         tasks
+// @Produce      json
+// @Success      201  {int}  1
+// @Router       /tasks [post]
 func (h *Task) Create(c *gin.Context) {
 	var dataTask domain.Task
 
@@ -68,6 +89,13 @@ func (h *Task) Create(c *gin.Context) {
 	c.JSON(http.StatusCreated, 1)
 }
 
+// ChangeCheckedByID            godoc
+// @Summary      Change checked task by ID
+// @Description  Responds 1 in JSON format.
+// @Tags         tasks
+// @Produce      json
+// @Success      200  {int}  1
+// @Router       /tasks [patch]
 func (h *Task) ChangeCheckedByID(c *gin.Context) {
 	queryId := c.Query("id")
 	queryChecked := c.Query("check")
@@ -87,6 +115,13 @@ func (h *Task) ChangeCheckedByID(c *gin.Context) {
 	c.JSON(http.StatusOK, 1)
 }
 
+// ChangeCheckedAll            godoc
+// @Summary      Change checked all task
+// @Description  Responds 1 in JSON format.
+// @Tags         tasks
+// @Produce      json
+// @Success      200  {int}  1
+// @Router       /tasks/{checked} [patch]
 func (h *Task) ChangeCheckedAll(c *gin.Context) {
 	queryChecked := c.Param("check")
 	Checked, errParseBool := strconv.ParseBool(queryChecked)
@@ -104,6 +139,13 @@ func (h *Task) ChangeCheckedAll(c *gin.Context) {
 	c.JSON(http.StatusOK, 1)
 }
 
+// DeleteAll            godoc
+// @Summary      Delete all checked true tasks
+// @Description  Responds 1 in JSON format.
+// @Tags         tasks
+// @Produce      json
+// @Success      200  {int}  1
+// @Router       /tasks [delete]
 func (h *Task) DeleteAll(c *gin.Context) {
 	errRepo := h.useCase.DeleteAll(c.Request.Context())
 	if errRepo != nil {
@@ -113,6 +155,13 @@ func (h *Task) DeleteAll(c *gin.Context) {
 	c.JSON(http.StatusOK, 1)
 }
 
+// ChangeText           godoc
+// @Summary      Change text task
+// @Description  Responds 1 in JSON format.
+// @Tags         tasks
+// @Produce      json
+// @Success      200  {int}  1
+// @Router       /tasks [put]
 func (h *Task) ChangeText(c *gin.Context) {
 	var dataTask domain.Task
 
@@ -127,4 +176,9 @@ func (h *Task) ChangeText(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, 1)
+}
+
+func (h *Task) Panicaaa(c *gin.Context) {
+	panic("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+	c.Next()
 }
