@@ -10,7 +10,7 @@ import (
 )
 
 type interfaceUseCase interface {
-	FindAll(ctx context.Context) ([]domain.Task, error)
+	FindAll(ctx context.Context) ([]*domain.Task, error)
 	Create(ctx context.Context, task domain.Task) error
 	DeleteByID(ctx context.Context, id int) error
 	DeleteAll(ctx context.Context) error
@@ -180,5 +180,4 @@ func (h *Task) ChangeText(c *gin.Context) {
 
 func (h *Task) Panicaaa(c *gin.Context) {
 	panic("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-	c.Next()
 }

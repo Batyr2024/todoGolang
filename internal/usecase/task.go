@@ -6,7 +6,7 @@ import (
 )
 
 type interfaceHandler interface {
-	FindAll(ctx context.Context) ([]domain.Task, error)
+	FindAll(ctx context.Context) ([]*domain.Task, error)
 	Create(ctx context.Context, task domain.Task) error
 	DeleteByID(ctx context.Context, id int) error
 	DeleteAll(ctx context.Context) error
@@ -25,7 +25,7 @@ func New(repo interfaceHandler) interfaceHandler {
 	}
 }
 
-func (c *useCase) FindAll(ctx context.Context) ([]domain.Task, error) {
+func (c *useCase) FindAll(ctx context.Context) ([]*domain.Task, error) {
 	tasks, err := c.taskRepo.FindAll(ctx)
 	return tasks, err
 }

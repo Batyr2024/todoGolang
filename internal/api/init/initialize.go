@@ -11,9 +11,8 @@ import (
 
 func Api(cfg config.Config) *http.ServerHTTP {
 	//wire.Build(db.Connect, repository.New, usecase.New, handler.New, http.NewServer)
-	gormDB := db.Connect(cfg)
-
-	taskRepository := repository.New(gormDB)
+	connect := db.Connect(cfg)
+	taskRepository := repository.New(connect)
 	taskUseCase := usecase.New(taskRepository)
 	taskHandler := handler.New(taskUseCase)
 	serverHTTP := http.NewServer(taskHandler)

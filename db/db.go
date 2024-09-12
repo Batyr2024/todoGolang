@@ -1,17 +1,18 @@
 package db
 
 import (
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
+	"context"
+	"github.com/Batyr2024/todoGolang/config"
+	"github.com/Batyr2024/todoGolang/db/sqlc"
+	"github.com/jackc/pgx/v5"
 	"log"
-
-	config "github.com/Batyr2024/todoGolang/config"
 )
 
-func Connect(cfg config.Config) *gorm.DB {
-	db, errCfg := gorm.Open(postgres.Open(cfg.DBUrl), &gorm.Config{})
+func Connect(cfg config.Config) *pgx.Conn {
+	conn, errCfg := pgx.Connect(context.Background(), cfg.DBUrl)
 	if errCfg != nil {
-		log.Fatalln(errCfg)
+		log.Fatal(errCfg)
 	}
-	return db
+	sqlc.New(conn)
+	return conn
 }

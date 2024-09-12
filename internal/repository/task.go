@@ -2,13 +2,14 @@ package repository
 
 import (
 	"context"
+	DB "github.com/Batyr2024/todoGolang/db/sqlc"
+	"github.com/jackc/pgx/v5"
 
 	"github.com/Batyr2024/todoGolang/domain"
-	"gorm.io/gorm"
 )
 
 type interfaceHandler interface {
-	FindAll(ctx context.Context) ([]domain.Task, error)
+	FindAll(ctx context.Context) ([]*domain.Task, error)
 	Create(ctx context.Context, task domain.Task) error
 	DeleteByID(ctx context.Context, id int) error
 	DeleteAll(ctx context.Context) error
@@ -16,53 +17,45 @@ type interfaceHandler interface {
 	ChangeCheckedAll(ctx context.Context, checked bool) error
 	ChangeText(ctx context.Context, id int, text string) error
 }
-
-type dataBase struct {
-	DB *gorm.DB
+type repository struct {
+	db *DB.Queries
 }
 
-func New(DB *gorm.DB) interfaceHandler {
-	return &dataBase{DB}
+func New(conn *pgx.Conn) interfaceHandler {
+	return &repository{DB.New(conn)}
 }
 
-func (c *dataBase) FindAll(ctx context.Context) ([]domain.Task, error) {
-	var tasks []domain.Task
-	err := c.DB.Find(&tasks).Error
+func (r *repository) FindAll(ctx context.Context) ([]*domain.Task, error) {
+	tasks, err := r.db.GetAll(ctx)
 	return tasks, err
 }
 
-func (c *dataBase) Create(ctx context.Context, task domain.Task) error {
-	err := c.DB.Create(&task).Error
+func (r *repository) Create(ctx context.Context, task domain.Task) error {
+	_, err := r.db.Create(ctx, &DB.CreateParams{Text: task.Text})
 	return err
 }
 
-func (c *dataBase) DeleteByID(ctx context.Context, id int) error {
-	var tasks domain.Task
-	err := c.DB.Delete(&tasks, id).Error
+func (r *repository) DeleteByID(ctx context.Context, ID int) error {
+	_, err := r.db.DeleteByID(ctx, &DB.DeleteByIDParams{ID: int32(ID)})
 	return err
 }
 
-func (c *dataBase) ChangeCheckedByID(ctx context.Context, id int, checked bool) error {
-	var tasks domain.Task
-	err := c.DB.Model(&tasks).Where("id = ?", id).Update("checked", checked).Error
+func (r *repository) ChangeCheckedByID(ctx context.Context, ID int, Checked bool) error {
+	_, err := r.db.ChangeCheckedByID(ctx, &DB.ChangeCheckedByIDParams{ID: int32(ID), Checked: &Checked})
 	return err
 }
 
-func (c *dataBase) ChangeCheckedAll(ctx context.Context, checked bool) error {
-	var tasks domain.Task
-	err := c.DB.Model(&tasks).Where("0=?", 0).Update("checked", checked).Error
+func (r *repository) ChangeCheckedAll(ctx context.Context, Checked bool) error {
+	_, err := r.db.ChangeCheckedAll(ctx, &DB.ChangeCheckedAllParams{Checked: &Checked})
 	return err
 }
 
-func (c *dataBase) DeleteAll(ctx context.Context) error {
-	var tasks domain.Task
-	err := c.DB.Model(&tasks).Where("checked=?", true).Delete(&tasks).Error
+func (r *repository) DeleteAll(ctx context.Context) error {
+	_, err := r.db.DeleteAll(ctx)
 	return err
 }
 
-func (c *dataBase) ChangeText(ctx context.Context, id int, text string) error {
-	var tasks domain.Task
-	err := c.DB.Model(&tasks).Where("id = ?", id).Update("text", text).Error
-	c.DB.Model(&tasks).Where("id = ?", id).Update("checked", false)
+func (r *repository) ChangeText(ctx context.Context, ID int, Text string) error {
+	_, err := r.db.ChangeTextByID(ctx, &DB.ChangeTextByIDParams{ID: int32(ID), Text: Text})
 	return err
 }
