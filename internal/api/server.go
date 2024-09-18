@@ -3,7 +3,7 @@ package http
 import (
 	"github.com/Batyr2024/todoGolang/internal/api/handler"
 	"github.com/Batyr2024/todoGolang/internal/api/middleware/corses"
-	logger "github.com/Batyr2024/todoGolang/internal/api/middleware/logger"
+	"github.com/Batyr2024/todoGolang/internal/api/middleware/logger"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -18,9 +18,9 @@ func NewServer(h *handler.Task) *ServerHTTP {
 
 	engine := gin.Default()
 
+	engine.Use(gin.Recovery())
 	engine.Use(corses.New())
 	engine.Use(logger.New())
-	engine.Use(gin.Recovery())
 
 	routes := engine.Group("/tasks")
 

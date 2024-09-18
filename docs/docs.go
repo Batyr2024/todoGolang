@@ -38,6 +38,12 @@ const docTemplate = `{
                                 "$ref": "#/definitions/domain.Task"
                             }
                         }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             },
@@ -55,6 +61,24 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "type": "int"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -74,6 +98,12 @@ const docTemplate = `{
                         "schema": {
                             "type": "int"
                         }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             },
@@ -87,10 +117,16 @@ const docTemplate = `{
                 ],
                 "summary": "Delete all checked true tasks",
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "204": {
+                        "description": "No Content",
                         "schema": {
                             "type": "int"
+                        }
+                    },
+                    "404": {
+                        "description": "error",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -105,10 +141,28 @@ const docTemplate = `{
                 ],
                 "summary": "Change checked task by ID",
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "204": {
+                        "description": "No Content",
                         "schema": {
                             "type": "int"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -125,10 +179,28 @@ const docTemplate = `{
                 ],
                 "summary": "Change checked all task",
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "204": {
+                        "description": "No Content",
                         "schema": {
                             "type": "int"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -145,10 +217,28 @@ const docTemplate = `{
                 ],
                 "summary": "Delete single task by id",
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "204": {
+                        "description": "No Content",
                         "schema": {
                             "type": "int"
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }

@@ -33,11 +33,12 @@ func New(taskUseCase interfaceUseCase) *Task {
 // @Tags         tasks
 // @Produce      json
 // @Success      200  {array}  domain.Task
+// @Failure 	 400 {string} string "error"
 // @Router       /tasks [get]
 func (h *Task) FindAll(c *gin.Context) {
 	tasks, err := h.useCase.FindAll(c.Request.Context())
 	if err != nil {
-		c.AbortWithStatus(http.StatusNotFound)
+		c.JSON(http.StatusBadRequest, err)
 		return
 	}
 	c.JSON(http.StatusOK, tasks)
@@ -48,10 +49,15 @@ func (h *Task) FindAll(c *gin.Context) {
 // @Description  Responds 1 in JSON format.
 // @Tags         tasks
 // @Produce      json
-// @Success      200  {int}  1
+// @Success      204  {int}  1
+// @Failure 	 400,404,500 {string} string "error"
 // @Router       /tasks/{id} [delete]
 func (h *Task) DeleteByID(c *gin.Context) {
 	queryId := c.Param("id")
+	if queryId == "" {
+		c.JSON(http.StatusBadRequest, `The Id field is missing`)
+		return
+	}
 	id, errParseInt := strconv.Atoi(queryId)
 	if errParseInt != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -61,10 +67,10 @@ func (h *Task) DeleteByID(c *gin.Context) {
 	}
 	errRepo := h.useCase.DeleteByID(c.Request.Context(), id)
 	if errRepo != nil {
-		c.AbortWithStatus(http.StatusNotFound)
+		c.JSON(http.StatusNotFound, errRepo)
 		return
 	}
-	c.JSON(http.StatusOK, 1)
+	c.JSON(http.StatusNoContent, 1)
 }
 
 // Create            godoc
@@ -73,17 +79,21 @@ func (h *Task) DeleteByID(c *gin.Context) {
 // @Tags         tasks
 // @Produce      json
 // @Success      201  {int}  1
+// @Failure 	 400 {string} string "error"
 // @Router       /tasks [post]
 func (h *Task) Create(c *gin.Context) {
 	var dataTask domain.Task
-
 	if err := c.BindJSON(&dataTask); err != nil {
-		c.JSON(http.StatusNotFound, err)
+		c.JSON(http.StatusBadRequest, err)
+		return
+	}
+	if dataTask.Text == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Text field is missing"})
 		return
 	}
 	err := h.useCase.Create(c.Request.Context(), dataTask)
 	if err != nil {
-		c.AbortWithStatus(http.StatusNotFound)
+		c.JSON(http.StatusBadRequest, err)
 		return
 	}
 	c.JSON(http.StatusCreated, 1)
@@ -94,11 +104,16 @@ func (h *Task) Create(c *gin.Context) {
 // @Description  Responds 1 in JSON format.
 // @Tags         tasks
 // @Produce      json
-// @Success      200  {int}  1
+// @Success      204  {int}  1
+// @Failure 	 400,404,500 {string} string "error"
 // @Router       /tasks [patch]
 func (h *Task) ChangeCheckedByID(c *gin.Context) {
 	queryId := c.Query("id")
 	queryChecked := c.Query("check")
+	if queryId == "" || queryChecked == "" {
+		c.JSON(http.StatusBadRequest, `The "Checked" or "Id" field is missing`)
+		return
+	}
 	id, errParseInt := strconv.Atoi(queryId)
 	Checked, errParseBool := strconv.ParseBool(queryChecked)
 	if errParseInt != nil && errParseBool != nil {
@@ -109,10 +124,10 @@ func (h *Task) ChangeCheckedByID(c *gin.Context) {
 	}
 	errRep := h.useCase.ChangeCheckedByID(c.Request.Context(), id, Checked)
 	if errRep != nil {
-		c.AbortWithStatus(http.StatusNotFound)
+		c.JSON(http.StatusNotFound, errRep)
 		return
 	}
-	c.JSON(http.StatusOK, 1)
+	c.JSON(http.StatusNoContent, 1)
 }
 
 // ChangeCheckedAll            godoc
@@ -120,10 +135,15 @@ func (h *Task) ChangeCheckedByID(c *gin.Context) {
 // @Description  Responds 1 in JSON format.
 // @Tags         tasks
 // @Produce      json
-// @Success      200  {int}  1
+// @Success      204  {int}  1
+// @Failure 	 400,404,500 {string} string "error"
 // @Router       /tasks/{checked} [patch]
 func (h *Task) ChangeCheckedAll(c *gin.Context) {
 	queryChecked := c.Param("check")
+	if queryChecked == "" {
+		c.JSON(http.StatusBadRequest, `The "Checked" field is missing`)
+		return
+	}
 	Checked, errParseBool := strconv.ParseBool(queryChecked)
 	if errParseBool != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -136,7 +156,7 @@ func (h *Task) ChangeCheckedAll(c *gin.Context) {
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
-	c.JSON(http.StatusOK, 1)
+	c.JSON(http.StatusNoContent, 1)
 }
 
 // DeleteAll            godoc
@@ -144,15 +164,16 @@ func (h *Task) ChangeCheckedAll(c *gin.Context) {
 // @Description  Responds 1 in JSON format.
 // @Tags         tasks
 // @Produce      json
-// @Success      200  {int}  1
+// @Success      204  {int}  1
+// @Failure 	 404 {string} string "error"
 // @Router       /tasks [delete]
 func (h *Task) DeleteAll(c *gin.Context) {
 	errRepo := h.useCase.DeleteAll(c.Request.Context())
 	if errRepo != nil {
-		c.AbortWithStatus(http.StatusNotFound)
+		c.JSON(http.StatusNotFound, errRepo)
 		return
 	}
-	c.JSON(http.StatusOK, 1)
+	c.JSON(http.StatusNoContent, 1)
 }
 
 // ChangeText           godoc
@@ -161,18 +182,21 @@ func (h *Task) DeleteAll(c *gin.Context) {
 // @Tags         tasks
 // @Produce      json
 // @Success      200  {int}  1
+// @Failure 	 400,404,500 {string} string "error"
 // @Router       /tasks [put]
 func (h *Task) ChangeText(c *gin.Context) {
 	var dataTask domain.Task
-
 	if err := c.BindJSON(&dataTask); err != nil {
-		c.JSON(http.StatusNotFound, err)
+		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
-
+	if dataTask.ID == 0 || dataTask.Text == "" {
+		c.JSON(http.StatusBadRequest, `The "Text" or "Id" field is missing`)
+		return
+	}
 	errRepo := h.useCase.ChangeText(c.Request.Context(), int(dataTask.ID), dataTask.Text)
 	if errRepo != nil {
-		c.AbortWithStatus(http.StatusNotFound)
+		c.JSON(http.StatusNotFound, errRepo)
 		return
 	}
 	c.JSON(http.StatusOK, 1)

@@ -5,7 +5,8 @@ import (
 	"github.com/Batyr2024/todoGolang/domain"
 )
 
-type interfaceHandler interface {
+//go:generate mockgen -source=task.go -destination=../../mocks/TaskUsecase.go
+type interfaceUseCase interface {
 	FindAll(ctx context.Context) ([]*domain.Task, error)
 	Create(ctx context.Context, task domain.Task) error
 	DeleteByID(ctx context.Context, id int) error
@@ -15,46 +16,46 @@ type interfaceHandler interface {
 	ChangeText(ctx context.Context, id int, text string) error
 }
 
-type useCase struct {
-	taskRepo interfaceHandler
+type UseCase struct {
+	taskRepo interfaceUseCase
 }
 
-func New(repo interfaceHandler) interfaceHandler {
-	return &useCase{
+func New(repo interfaceUseCase) interfaceUseCase {
+	return &UseCase{
 		taskRepo: repo,
 	}
 }
 
-func (c *useCase) FindAll(ctx context.Context) ([]*domain.Task, error) {
+func (c *UseCase) FindAll(ctx context.Context) ([]*domain.Task, error) {
 	tasks, err := c.taskRepo.FindAll(ctx)
 	return tasks, err
 }
 
-func (c *useCase) Create(ctx context.Context, task domain.Task) error {
+func (c *UseCase) Create(ctx context.Context, task domain.Task) error {
 	err := c.taskRepo.Create(ctx, task)
 	return err
 }
 
-func (c *useCase) DeleteByID(ctx context.Context, id int) error {
+func (c *UseCase) DeleteByID(ctx context.Context, id int) error {
 	err := c.taskRepo.DeleteByID(ctx, id)
 	return err
 }
-func (c *useCase) ChangeCheckedByID(ctx context.Context, id int, checked bool) error {
+func (c *UseCase) ChangeCheckedByID(ctx context.Context, id int, checked bool) error {
 	err := c.taskRepo.ChangeCheckedByID(ctx, id, checked)
 	return err
 }
 
-func (c *useCase) ChangeCheckedAll(ctx context.Context, checked bool) error {
+func (c *UseCase) ChangeCheckedAll(ctx context.Context, checked bool) error {
 	err := c.taskRepo.ChangeCheckedAll(ctx, checked)
 	return err
 }
 
-func (c *useCase) DeleteAll(ctx context.Context) error {
+func (c *UseCase) DeleteAll(ctx context.Context) error {
 	err := c.taskRepo.DeleteAll(ctx)
 	return err
 }
 
-func (c *useCase) ChangeText(ctx context.Context, id int, text string) error {
+func (c *UseCase) ChangeText(ctx context.Context, id int, text string) error {
 	err := c.taskRepo.ChangeText(ctx, id, text)
 	return err
 }

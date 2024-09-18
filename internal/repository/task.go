@@ -8,7 +8,9 @@ import (
 	"github.com/Batyr2024/todoGolang/domain"
 )
 
-type interfaceHandler interface {
+//go:generate mockgen -source=task.go -destination=../../mocks/TaskRepository.go
+
+type interfaceRepository interface {
 	FindAll(ctx context.Context) ([]*domain.Task, error)
 	Create(ctx context.Context, task domain.Task) error
 	DeleteByID(ctx context.Context, id int) error
@@ -21,7 +23,7 @@ type repository struct {
 	db *DB.Queries
 }
 
-func New(conn *pgx.Conn) interfaceHandler {
+func New(conn *pgx.Conn) interfaceRepository {
 	return &repository{DB.New(conn)}
 }
 
