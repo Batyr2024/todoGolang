@@ -8,6 +8,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"net/http"
+	"path/filepath"
 )
 
 type ServerHTTP struct {
@@ -22,6 +23,9 @@ func NewServer(h *handler.Task) *ServerHTTP {
 	engine.Use(corses.New())
 	engine.Use(logger.New())
 
+	staticPath, _ := filepath.Abs("/home/dunice/todo")
+	fs := http.FileServer(http.Dir(staticPath))
+
 	routes := engine.Group("/tasks")
 
 	routes.GET("/", h.FindAll)
@@ -32,7 +36,7 @@ func NewServer(h *handler.Task) *ServerHTTP {
 	routes.DELETE("/", h.DeleteAll)
 	routes.PUT("/", h.ChangeText)
 	routes.GET("/panic", h.Panicaaa)
-
+	routes.GET("/ht", func() gin.HandlerFunc { return fs })
 	engine.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{})
 	})
@@ -43,4 +47,5 @@ func NewServer(h *handler.Task) *ServerHTTP {
 }
 func (s *ServerHTTP) Start(port string) {
 	s.engine.Run(port)
+
 }

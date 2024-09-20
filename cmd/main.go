@@ -4,6 +4,8 @@ import (
 	"github.com/Batyr2024/todoGolang/config"
 	"github.com/Batyr2024/todoGolang/docs"
 	initialize "github.com/Batyr2024/todoGolang/internal/api/init"
+	tg "github.com/Batyr2024/todoGolang/internal/api/telegram"
+	"github.com/Batyr2024/todoGolang/internal/usecase/telegram"
 	"log"
 )
 
@@ -23,9 +25,10 @@ func main() {
 	}
 
 	docs.Init()
-
+	tg := tg.Init("7536965859:AAFYNHHynpHSjfIf06IydVrS5FMgYxIvZu4")
 	server := initialize.Api(config)
-
+	tgBot := telegram.New(tg)
+	go tgBot.SendMessage()
 	server.Start(string(config.Port))
 
 }

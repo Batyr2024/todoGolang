@@ -5,7 +5,7 @@ import (
 	"context"
 	"github.com/Batyr2024/todoGolang/domain"
 	"github.com/Batyr2024/todoGolang/internal/usecase"
-	"github.com/Batyr2024/todoGolang/mocks"
+	mocks "github.com/Batyr2024/todoGolang/mocks/handl"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
 	"github.com/magiconair/properties/assert"
@@ -15,7 +15,7 @@ import (
 )
 
 func TestTask_Create(t *testing.T) {
-	type mockBehavior func(s *mocks.MockinterfaceHandler, task domain.Task, ctx context.Context)
+	type mockBehavior func(s *mocks.MockinterfaceUseCase, task domain.Task, ctx context.Context)
 
 	testTable := []struct {
 		name         string
@@ -33,7 +33,7 @@ func TestTask_Create(t *testing.T) {
 				Text:    "Kyhksjdhsf",
 				Checked: false,
 			},
-			mockBehavior: func(s *mocks.MockinterfaceHandler, task domain.Task, ctx context.Context) {
+			mockBehavior: func(s *mocks.MockinterfaceUseCase, task domain.Task, ctx context.Context) {
 				s.EXPECT().Create(ctx, task).Return(nil)
 			},
 			expectedCode: http.StatusCreated,
@@ -42,7 +42,7 @@ func TestTask_Create(t *testing.T) {
 		{
 			name:         "Empty body",
 			inputBody:    `{"Texted":"Kyhksjdhsf"}`,
-			mockBehavior: func(s *mocks.MockinterfaceHandler, task domain.Task, ctx context.Context) {},
+			mockBehavior: func(s *mocks.MockinterfaceUseCaseMock, task domain.Task, ctx context.Context) {},
 			expectedCode: http.StatusBadRequest,
 			expectedBody: `{"error":"Text field is missing"}`,
 		},
