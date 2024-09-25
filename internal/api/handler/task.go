@@ -11,7 +11,7 @@ import (
 
 type interfaceUseCase interface {
 	FindAll(ctx context.Context) ([]*domain.Task, error)
-	Create(ctx context.Context, task domain.Task) error
+	Create(ctx context.Context, task domain.Task) (*domain.Task, error)
 	DeleteByID(ctx context.Context, id int) error
 	DeleteAll(ctx context.Context) error
 	ChangeCheckedByID(ctx context.Context, id int, checked bool) error
@@ -19,8 +19,19 @@ type interfaceUseCase interface {
 	ChangeText(ctx context.Context, id int, text string) error
 }
 
+type interfaceHandler interface {
+	FindAll(ctx context.Context)
+	Create(ctx context.Context)
+	DeleteByID(ctx context.Context)
+	DeleteAll(ctx context.Context)
+	ChangeCheckedByID(ctx context.Context)
+	ChangeCheckedAll(ctx context.Context)
+	ChangeText(ctx context.Context)
+}
+
 type Task struct {
 	useCase interfaceUseCase
+	interfaceHandler
 }
 
 func New(taskUseCase interfaceUseCase) *Task {
@@ -54,10 +65,6 @@ func (h *Task) FindAll(c *gin.Context) {
 // @Router       /tasks/{id} [delete]
 func (h *Task) DeleteByID(c *gin.Context) {
 	queryId := c.Param("id")
-	if queryId == "" {
-		c.JSON(http.StatusBadRequest, `The Id field is missing`)
-		return
-	}
 	id, errParseInt := strconv.Atoi(queryId)
 	if errParseInt != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -91,12 +98,12 @@ func (h *Task) Create(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Text field is missing"})
 		return
 	}
-	err := h.useCase.Create(c.Request.Context(), dataTask)
+	newTask, err := h.useCase.Create(c.Request.Context(), dataTask)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
-	c.JSON(http.StatusCreated, 1)
+	c.JSON(http.StatusCreated, newTask)
 }
 
 // ChangeCheckedByID            godoc
@@ -140,10 +147,6 @@ func (h *Task) ChangeCheckedByID(c *gin.Context) {
 // @Router       /tasks/{checked} [patch]
 func (h *Task) ChangeCheckedAll(c *gin.Context) {
 	queryChecked := c.Param("check")
-	if queryChecked == "" {
-		c.JSON(http.StatusBadRequest, `The "Checked" field is missing`)
-		return
-	}
 	Checked, errParseBool := strconv.ParseBool(queryChecked)
 	if errParseBool != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{

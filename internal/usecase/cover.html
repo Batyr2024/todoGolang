@@ -55,7 +55,7 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">github.com/Batyr2024/todoGolang/internal/usecase/task.go (20.0%)</option>
+				<option value="file0">github.com/Batyr2024/todoGolang/internal/usecase/task.go (100.0%)</option>
 				
 				</select>
 			</div>
@@ -79,7 +79,7 @@ import (
 //go:generate mockgen -source=task.go -destination=../../mocks/TaskUsecase.go
 type interfaceUseCase interface {
         FindAll(ctx context.Context) ([]*domain.Task, error)
-        Create(ctx context.Context, task domain.Task) error
+        Create(ctx context.Context, task domain.Task) (*domain.Task, error)
         DeleteByID(ctx context.Context, id int) error
         DeleteAll(ctx context.Context) error
         ChangeCheckedByID(ctx context.Context, id int, checked bool) error
@@ -102,31 +102,31 @@ func (c *UseCase) FindAll(ctx context.Context) ([]*domain.Task, error) <span cla
         return tasks, err
 }</span>
 
-func (c *UseCase) Create(ctx context.Context, task domain.Task) error <span class="cov0" title="0">{
-        err := c.taskRepo.Create(ctx, task)
-        return err
+func (c *UseCase) Create(ctx context.Context, task domain.Task) (*domain.Task, error) <span class="cov8" title="1">{
+        newTask, err := c.taskRepo.Create(ctx, task)
+        return newTask, err
 }</span>
 
-func (c *UseCase) DeleteByID(ctx context.Context, id int) error <span class="cov0" title="0">{
+func (c *UseCase) DeleteByID(ctx context.Context, id int) error <span class="cov8" title="1">{
         err := c.taskRepo.DeleteByID(ctx, id)
         return err
 }</span>
-func (c *UseCase) ChangeCheckedByID(ctx context.Context, id int, checked bool) error <span class="cov0" title="0">{
+func (c *UseCase) ChangeCheckedByID(ctx context.Context, id int, checked bool) error <span class="cov8" title="1">{
         err := c.taskRepo.ChangeCheckedByID(ctx, id, checked)
         return err
 }</span>
 
-func (c *UseCase) ChangeCheckedAll(ctx context.Context, checked bool) error <span class="cov0" title="0">{
+func (c *UseCase) ChangeCheckedAll(ctx context.Context, checked bool) error <span class="cov8" title="1">{
         err := c.taskRepo.ChangeCheckedAll(ctx, checked)
         return err
 }</span>
 
-func (c *UseCase) DeleteAll(ctx context.Context) error <span class="cov0" title="0">{
+func (c *UseCase) DeleteAll(ctx context.Context) error <span class="cov8" title="1">{
         err := c.taskRepo.DeleteAll(ctx)
         return err
 }</span>
 
-func (c *UseCase) ChangeText(ctx context.Context, id int, text string) error <span class="cov0" title="0">{
+func (c *UseCase) ChangeText(ctx context.Context, id int, text string) error <span class="cov8" title="1">{
         err := c.taskRepo.ChangeText(ctx, id, text)
         return err
 }</span>

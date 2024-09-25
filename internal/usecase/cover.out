@@ -1,9 +1,9 @@
 mode: set
 github.com/Batyr2024/todoGolang/internal/usecase/task.go:23.50,27.2 1 1
 github.com/Batyr2024/todoGolang/internal/usecase/task.go:29.72,32.2 2 1
-github.com/Batyr2024/todoGolang/internal/usecase/task.go:34.71,37.2 2 0
-github.com/Batyr2024/todoGolang/internal/usecase/task.go:39.65,42.2 2 0
-github.com/Batyr2024/todoGolang/internal/usecase/task.go:43.86,46.2 2 0
-github.com/Batyr2024/todoGolang/internal/usecase/task.go:48.77,51.2 2 0
-github.com/Batyr2024/todoGolang/internal/usecase/task.go:53.56,56.2 2 0
-github.com/Batyr2024/todoGolang/internal/usecase/task.go:58.78,61.2 2 0
+github.com/Batyr2024/todoGolang/internal/usecase/task.go:34.87,37.2 2 1
+github.com/Batyr2024/todoGolang/internal/usecase/task.go:39.65,42.2 2 1
+github.com/Batyr2024/todoGolang/internal/usecase/task.go:43.86,46.2 2 1
+github.com/Batyr2024/todoGolang/internal/usecase/task.go:48.77,51.2 2 1
+github.com/Batyr2024/todoGolang/internal/usecase/task.go:53.56,56.2 2 1
+github.com/Batyr2024/todoGolang/internal/usecase/task.go:58.78,61.2 2 1

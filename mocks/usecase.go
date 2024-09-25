@@ -78,11 +78,12 @@ func (mr *MockinterfaceUseCaseMockRecorder) ChangeText(ctx, id, text interface{}
 }
 
 // Create mocks base method.
-func (m *MockinterfaceUseCase) Create(ctx context.Context, task domain.Task) error {
+func (m *MockinterfaceUseCase) Create(ctx context.Context, task domain.Task) (*domain.Task, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", ctx, task)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(*domain.Task)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // Create indicates an expected call of Create.

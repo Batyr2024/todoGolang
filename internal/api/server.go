@@ -24,7 +24,7 @@ func NewServer(h *handler.Task) *ServerHTTP {
 	engine.Use(logger.New())
 
 	staticPath, _ := filepath.Abs("/home/dunice/todo")
-	fs := http.FileServer(http.Dir(staticPath))
+	engine.StaticFS("/static", http.Dir(staticPath))
 
 	routes := engine.Group("/tasks")
 
@@ -36,7 +36,7 @@ func NewServer(h *handler.Task) *ServerHTTP {
 	routes.DELETE("/", h.DeleteAll)
 	routes.PUT("/", h.ChangeText)
 	routes.GET("/panic", h.Panicaaa)
-	routes.GET("/ht", func() gin.HandlerFunc { return fs })
+
 	engine.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{})
 	})

@@ -6,7 +6,8 @@ INSERT INTO tasks (
         )RETURNING *;
 
 -- name: GetAll :many
-SELECT * FROM tasks;
+SELECT * FROM tasks
+ORDER BY id ASC;
 
 -- name: ChangeCheckedByID :one
 UPDATE  tasks
