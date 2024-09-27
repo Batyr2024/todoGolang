@@ -10,22 +10,22 @@ import (
 // @title ToDo API
 // @version 1.0
 // @description Description of the ToDO REST API
-// @contact.name   Batyr Abdusalamov
+// @contact.name   BatyrAbdusalamov
 // @contact.url    https://twitter.com/
 // @contact.email  b.abdusalamov@nv.dunice.net
 // @host      localhost:3000
 // @BasePath  /tasks
 func main() {
 	const pathCfg = "/home/dunice/Документы/todoGolang/.env"
-	config, err := config.Load(pathCfg)
+	cfg, err := config.Load(pathCfg)
 	if err != nil {
 		log.Fatal("cannot load config: ", err)
 	}
 
 	docs.Init()
 
-	server := initialize.Api(config)
+	server := initialize.Api(cfg)
 
-	server.Start(string(config.Port))
+	server.Start(string(cfg.Port))
 
 }
